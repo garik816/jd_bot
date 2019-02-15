@@ -1,4 +1,6 @@
-﻿### TODO:
+﻿#!/usr/bin/env python
+
+### TODO:
 #	Коллаж пусть делает
 #	DialogflowAI
 #	heroku online
@@ -27,16 +29,11 @@ def startCommand(bot, update):
 	'Ещё со мной можно поговорить :)')
     user = update.message.from_user
     bot.send_message(chat_id=-365824280, text=user.first_name + ':\t' + '/start')
- 
-# echo debug
-def echo(bot, update):
-    update.message.reply_text(update.message.text)
 	
 def flip_image(image_path, saved_location):
     image_obj = Image.open(image_path)
     rotated_image = image_obj.transpose(Image.FLIP_LEFT_RIGHT)
     rotated_image.save(saved_location)
-#   rotated_image.show()
 
 def textMessage(bot, update):
     request = apiai.ApiAI('d478fb04da3e4d5c89711e31a59d7150').text_request() # Токен API к Dialogflow
@@ -46,14 +43,8 @@ def textMessage(bot, update):
     responseJson = json.loads(request.getresponse().read().decode('utf-8'))
     response = responseJson['result']['fulfillment']['speech'] # Разбираем JSON и вытаскиваем ответ
     user = update.message.from_user
-### log in file
-#    logFile = open('log.log', 'a')
     bot.send_message(chat_id=-365824280, text=user.first_name + ':\t' + request.query)
     bot.send_message(chat_id=-365824280, text='БОТ: \t' + response)
-#    logFile.write('[' + datetime.strftime(datetime.now(), "%d.%m.%Y %H:%M:%S") + '] ' + user.first_name + ':\t' + request.query + '\n')
-#    logFile.write('[' + datetime.strftime(datetime.now(), "%d.%m.%Y %H:%M:%S") + '] ' + 'БОТ: \t' + response + '\n')
-#    logFile.close()
-###	end log in file
     # Если есть ответ от бота - присылаем юзеру, если нет - бот его не понял
     if response:
         bot.send_message(chat_id=update.message.chat_id, text=response)
