@@ -1,9 +1,12 @@
 ﻿#!/usr/bin/env python
 
 ### TODO:
-#	Коллаж пусть делает
-#	DialogflowAI
-#	heroku online
+#	
+#	Dialogflow
+#	heroku
+#	перейти на вебхуки
+#	будильник
+#	
 
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 from datetime import datetime
@@ -36,8 +39,8 @@ def flip_image(image_path, saved_location):
     rotated_image.save(saved_location)
 
 def textMessage(bot, update):
-    request = apiai.ApiAI('d478fb04da3e4d5c89711e31a59d7150').text_request() # Токен API к Dialogflow
-    request.lang = 'ru' # На каком языке будет послан запрос
+    request = apiai.ApiAI('d478fb04da3e4d5c89711e31a59d7150').text_request() # Токен API к Dialogflow  # 'd478fb04da3e4d5c89711e31a59d7150'
+    request.lang = 'ru' # На каком языке будет послан запрос # 'ru'
     request.session_id = 'BatlabAIBot' # ID Сессии диалога (нужно, чтобы потом учить бота)
     request.query = update.message.text # Посылаем запрос к ИИ с сообщением от юзера
     responseJson = json.loads(request.getresponse().read().decode('utf-8'))
@@ -45,24 +48,21 @@ def textMessage(bot, update):
     user = update.message.from_user
     bot.send_message(chat_id=-365824280, text=user.first_name + ':\t' + request.query)
     bot.send_message(chat_id=-365824280, text='БОТ: \t' + response)
-    # Если есть ответ от бота - присылаем юзеру, если нет - бот его не понял
+    
     if response:
-        bot.send_message(chat_id=update.message.chat_id, text=response)
+        bot.send_message(chat_id=update.message.chat_id, text=response) # Если есть ответ от бота - присылаем юзеру, 
     else:
-        bot.send_message(chat_id=update.message.chat_id, text='я тугой, не понимаю')	
+        bot.send_message(chat_id=update.message.chat_id, text='я тугой, не понимаю') #если нет - бот его не понял
 	
 def flipEcho(bot, update):
     update.message.reply_text("отзеркаливаю...")
     photo_file = bot.getFile(update.message.photo[-1].file_id)
     filename = os.path.join(os.getcwd(), '{}.jpg'.format(photo_file.file_id))
     photo_file.download(filename)
-#    bot.send_message(update.message.chat.id, text=filename) # debug отправка сообщений!!!
     filename_tosend = filename.replace("\\","/")
-#    bot.send_message(update.message.chat.id, text=filename_tosend) # debug
     flip_image(filename_tosend,'flipped.jpg')
     bot.send_photo(update.message.chat.id, photo=open('flipped.jpg', 'rb'))
     update.message.reply_text("обращайся)")
-
 	
     if img_has_cat(filename):
         update.message.reply_text("if")
@@ -71,19 +71,10 @@ def flipEcho(bot, update):
     else:
         os.remove(filename)
         update.message.reply_text("else")	
- 
-# создаём основной объект для управления ботом
-updater = Updater(telegram_token)
- 
-# регистрируем процедуру start как обработчик команды start
-updater.dispatcher.add_handler(CommandHandler('start', startCommand))
- 
-# регистрируем процедуру textMessage как обработчик текстового сообщения (DialogflowAI)
-updater.dispatcher.add_handler(MessageHandler(Filters.text, textMessage))
 
-# echo + flip для картинок
-updater.dispatcher.add_handler(MessageHandler(Filters.photo, flipEcho))
- 
-# запускаем бота
-updater.start_polling(clean=True) #updater.start_polling()
+updater = Updater(telegram_token) # создаём основной объект для управления ботом
+updater.dispatcher.add_handler(CommandHandler('start', startCommand)) # регистрируем процедуру start как обработчик команды start
+updater.dispatcher.add_handler(MessageHandler(Filters.text, textMessage)) # регистрируем процедуру textMessage как обработчик текстового сообщения (DialogflowAI)
+updater.dispatcher.add_handler(MessageHandler(Filters.photo, flipEcho)) # echo + flip для картинок
+updater.start_polling(clean=True) #updater.start_polling() # запускаем бота
 updater.idle()
