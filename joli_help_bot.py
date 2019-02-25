@@ -19,10 +19,8 @@ import apiai, json
 logging.basicConfig(level=logging.DEBUG,format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
  
 # токен полученный при регистрации бота
-TOKEN = "796136257:AAGO7X5TcPCG38uxZQxSfePzkH5NT5I8o_s"
-PORT = int(os.environ.get('PORT', '8443'))
-#updater = Updater(token=TOKEN) # Токен API к Telegram
-updater = Updater(TOKEN)
+telegram_token = '796136257:AAGO7X5TcPCG38uxZQxSfePzkH5NT5I8o_s'
+updater = Updater(token=telegram_token) # Токен API к Telegram
 dispatcher = updater.dispatcher
 
  
@@ -84,22 +82,10 @@ def flipEcho(bot, update):
     os.remove('flipped.jpg')
     update.message.reply_text("обращайся)")
 
+updater = Updater(telegram_token) # создаём основной объект для управления ботом
 updater.dispatcher.add_handler(CommandHandler('start', startCommand)) # регистрируем процедуру start как обработчик команды start
 updater.dispatcher.add_handler(CommandHandler('joli', joliWakeUpCommand))
 updater.dispatcher.add_handler(MessageHandler(Filters.text, textMessage)) # регистрируем процедуру textMessage как обработчик текстового сообщения (DialogflowAI)
-updater.dispatcher.add_handler(MessageHandler(Filters.photo, flipEcho)) # echo + flip для картинок	
-	
-updater.start_webhook(listen="0.0.0.0",
-                      port=PORT,
-                      url_path=TOKEN)
-updater.bot.set_webhook("https://joli-help-bot.herokuapp.com/" + TOKEN)
-updater.idle()	
-	
-	
-#updater = Updater(TOKEN) # создаём основной объект для управления ботом
-#updater.dispatcher.add_handler(CommandHandler('start', startCommand)) # регистрируем процедуру start как обработчик команды start
-#updater.dispatcher.add_handler(CommandHandler('joli', joliWakeUpCommand))
-#updater.dispatcher.add_handler(MessageHandler(Filters.text, textMessage)) # регистрируем процедуру textMessage как обработчик текстового сообщения (DialogflowAI)
-#updater.dispatcher.add_handler(MessageHandler(Filters.photo, flipEcho)) # echo + flip для картинок
-#updater.start_polling(clean=True) #updater.start_polling() # запускаем бота
-#updater.idle()
+updater.dispatcher.add_handler(MessageHandler(Filters.photo, flipEcho)) # echo + flip для картинок
+updater.start_polling(clean=True) #updater.start_polling() # запускаем бота
+updater.idle()
