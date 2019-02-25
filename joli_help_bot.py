@@ -27,8 +27,8 @@ dispatcher = updater.dispatcher
 # start вызывается после команды /start
 def startCommand(bot, update):
     bot.send_message(chat_id=update.message.chat_id, text='Привет :)')
-    bot.send_message(chat_id=update.message.chat_id, text='Я твой персональный помощник\n'
-	'Просто отправь мне картинку\n'
+    bot.send_message(chat_id=update.message.chat_id, text='меня зовут JD\n'
+	'Я умею отзеркаливать картинки\n'
 	'Ещё со мной можно поговорить :)')
     user = update.message.from_user
     bot.send_message(chat_id=-365824280, text=user.first_name + ':\t' + '/start')
