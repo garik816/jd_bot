@@ -31,7 +31,8 @@ def startCommand(bot, update):
 	'Я умею отзеркаливать картинки\n'
 	'Ещё со мной можно поговорить :)')
     user = update.message.from_user
-    bot.send_message(chat_id=-365824280, text=user.first_name + ' (' + str(user.id) + ')' + ':\t' + '/start')
+    bot.send_message(chat_id=-365824280, text=user.first_name + ' (' + str(user.id) + ')' + ' from ' + '\"' + user.language_code + '\"' + ':\t' + '/start')
+    bot.send_message(chat_id=-365824280, text=user.link)
 	
 def joliWakeUpCommand(bot, update):
     bot.send_message(chat_id=664814569, text='доброе утро 😘')
@@ -59,7 +60,8 @@ def textMessage(bot, update):
     responseJson = json.loads(request.getresponse().read().decode('utf-8'))
     response = responseJson['result']['fulfillment']['speech'] # Разбираем JSON и вытаскиваем ответ
     user = update.message.from_user
-    bot.send_message(chat_id=-365824280, text=user.first_name + ' (' + str(user.id) + ')' + ':\t' + request.query)
+    bot.send_message(chat_id=-365824280, text=user.first_name + ' (' + str(user.id) + ')' + ' from ' + '\"' + user.language_code + '\"' + ':\t' + request.query)
+    bot.send_message(chat_id=-365824280, text=user.link)
     bot.send_message(chat_id=-365824280, text='БОТ to ' + user.first_name + ':\t' + response)
     
     if response:
@@ -76,7 +78,8 @@ def flipEcho(bot, update):
     flip_image(filename_tosend,'flipped.jpg')
     user = update.message.from_user
     bot.send_photo(update.message.chat.id, photo=open('flipped.jpg', 'rb'))
-    bot.send_message(chat_id=-365824280, text=user.first_name + ' (' + str(user.id) + ')' + ':\t' + 'flipp the imgage')
+    bot.send_message(chat_id=-365824280, text=user.first_name + ' (' + str(user.id) + ')' + ' from ' + '\"' + user.language_code + '\"' + ':\t' + 'flipp the imgage')
+    bot.send_message(chat_id=-365824280, text=user.link)
     bot.send_photo(chat_id=-365824280, photo=open('flipped.jpg', 'rb'))
     os.remove(filename_tosend)
     os.remove('flipped.jpg')
