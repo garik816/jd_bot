@@ -1,1 +1,1 @@
-worker: python joli_help_bot.py
+worker: python jd_help_bot.py
