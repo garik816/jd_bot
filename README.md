@@ -1,4 +1,4 @@
-# joli_help_bot
+# jd_bot
 telegram bot + dialogflow
 
 pip install pillow datetime telegram python-telegram-bot apiai
